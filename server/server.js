@@ -1,3 +1,4 @@
+// I used AI for suggestions in this file but it was largely written by me. 
 
 import express from 'express'
 import sqlite3 from 'sqlite3'
