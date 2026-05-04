@@ -2,6 +2,16 @@
 
 const strBaseUrl = 'http://localhost:8000/api/'
 
+// This is an array of objects that holds the data for the resume.
+// This was used to avoid having to make a separate fetch request for each table.
+const objAppState = {
+    arrJobs: [],
+    arrResponsibilities: [],
+    arrSkills: [],
+    arrCerts: [],
+    arrAwards: []
+}
+
 // Function to load all the data into tables
 function loadData() {
     // View Jobs
@@ -14,10 +24,13 @@ function loadData() {
             }
         })
         .then(data => {
+            objAppState.arrJobs = data.message
             let arrJobs = data.message
             document.querySelector('#tblJobsBody').innerHTML = ''
+            document.querySelector('#divJobsCheckboxes').innerHTML = ''
             arrJobs.forEach(objJob => {
-                document.querySelector('#tblJobsBody').innerHTML += `<tr><td>${objJob.intJobID}</td><td>${objJob.strCompany}</td><td>${objJob.strTitle}</td><td>${objJob.strStartDate}</td><td>${objJob.strEndDate}</td></tr>`
+                document.querySelector('#tblJobsBody').innerHTML += `<tr><td>${objJob.intJobID}</td><td>${objJob.strCompany}</td><td>${objJob.strTitle}</td><td>${objJob.strStartDate}</td><td>${objJob.strEndDate}</td><td><button class="btn btn-sm btn-danger btnDeleteJob" data-id="${objJob.intJobID}">Delete</button></td></tr>`
+                document.querySelector('#divJobsCheckboxes').innerHTML += `<div class="form-check"><input class="form-check-input" type="checkbox" name="chkJob" value="${objJob.intJobID}" id="chkJob${objJob.intJobID}"><label class="form-check-label" for="chkJob${objJob.intJobID}">${objJob.strTitle} at ${objJob.strCompany}</label></div>`
             })
         })
         .catch(error => {
@@ -34,10 +47,13 @@ function loadData() {
             }
         })
         .then(data => {
+            objAppState.arrResponsibilities = data.message
             let arrResp = data.message
             document.querySelector('#tblRespBody').innerHTML = ''
+            document.querySelector('#divRespCheckboxes').innerHTML = ''
             arrResp.forEach(objResp => {
-                document.querySelector('#tblRespBody').innerHTML += `<tr><td>${objResp.intRespID}</td><td>${objResp.intJobID}</td><td>${objResp.strDescription}</td></tr>`
+                document.querySelector('#tblRespBody').innerHTML += `<tr><td>${objResp.intRespID}</td><td>${objResp.intJobID}</td><td>${objResp.strDescription}</td><td><button class="btn btn-sm btn-danger btnDeleteResp" data-id="${objResp.intRespID}">Delete</button></td></tr>`
+                document.querySelector('#divRespCheckboxes').innerHTML += `<div class="form-check"><input class="form-check-input" type="checkbox" name="chkResp" value="${objResp.intRespID}" id="chkResp${objResp.intRespID}"><label class="form-check-label" for="chkResp${objResp.intRespID}">Job ${objResp.intJobID}: ${objResp.strDescription}</label></div>`
             })
         })
         .catch(error => {
@@ -54,10 +70,13 @@ function loadData() {
             }
         })
         .then(data => {
+            objAppState.arrSkills = data.message
             let arrSkills = data.message
             document.querySelector('#tblSkillsBody').innerHTML = ''
+            document.querySelector('#divSkillsCheckboxes').innerHTML = ''
             arrSkills.forEach(objSkill => {
-                document.querySelector('#tblSkillsBody').innerHTML += `<tr><td>${objSkill.intSkillID}</td><td>${objSkill.strCategory}</td><td>${objSkill.strSkillName}</td></tr>`
+                document.querySelector('#tblSkillsBody').innerHTML += `<tr><td>${objSkill.intSkillID}</td><td>${objSkill.strCategory}</td><td>${objSkill.strSkillName}</td><td><button class="btn btn-sm btn-danger btnDeleteSkill" data-id="${objSkill.intSkillID}">Delete</button></td></tr>`
+                document.querySelector('#divSkillsCheckboxes').innerHTML += `<div class="form-check"><input class="form-check-input" type="checkbox" name="chkSkill" value="${objSkill.intSkillID}" id="chkSkill${objSkill.intSkillID}"><label class="form-check-label" for="chkSkill${objSkill.intSkillID}">${objSkill.strSkillName} (${objSkill.strCategory})</label></div>`
             })
         })
         .catch(error => {
@@ -74,10 +93,13 @@ function loadData() {
             }
         })
         .then(data => {
+            objAppState.arrCerts = data.message
             let arrCerts = data.message
             document.querySelector('#tblCertsBody').innerHTML = ''
+            document.querySelector('#divCertsCheckboxes').innerHTML = ''
             arrCerts.forEach(objCert => {
-                document.querySelector('#tblCertsBody').innerHTML += `<tr><td>${objCert.intCertID}</td><td>${objCert.strName}</td><td>${objCert.strIssuer}</td><td>${objCert.strDateEarned}</td></tr>`
+                document.querySelector('#tblCertsBody').innerHTML += `<tr><td>${objCert.intCertID}</td><td>${objCert.strName}</td><td>${objCert.strIssuer}</td><td>${objCert.strDateEarned}</td><td><button class="btn btn-sm btn-danger btnDeleteCert" data-id="${objCert.intCertID}">Delete</button></td></tr>`
+                document.querySelector('#divCertsCheckboxes').innerHTML += `<div class="form-check"><input class="form-check-input" type="checkbox" name="chkCert" value="${objCert.intCertID}" id="chkCert${objCert.intCertID}"><label class="form-check-label" for="chkCert${objCert.intCertID}">${objCert.strName}</label></div>`
             })
         })
         .catch(error => {
@@ -94,10 +116,13 @@ function loadData() {
             }
         })
         .then(data => {
+            objAppState.arrAwards = data.message
             let arrAwards = data.message
             document.querySelector('#tblAwardsBody').innerHTML = ''
+            document.querySelector('#divAwardsCheckboxes').innerHTML = ''
             arrAwards.forEach(objAward => {
-                document.querySelector('#tblAwardsBody').innerHTML += `<tr><td>${objAward.intAwardID}</td><td>${objAward.strTitle}</td><td>${objAward.strDateReceived}</td><td>${objAward.strDescription}</td></tr>`
+                document.querySelector('#tblAwardsBody').innerHTML += `<tr><td>${objAward.intAwardID}</td><td>${objAward.strTitle}</td><td>${objAward.strDateReceived}</td><td>${objAward.strDescription}</td><td><button class="btn btn-sm btn-danger btnDeleteAward" data-id="${objAward.intAwardID}">Delete</button></td></tr>`
+                document.querySelector('#divAwardsCheckboxes').innerHTML += `<div class="form-check"><input class="form-check-input" type="checkbox" name="chkAward" value="${objAward.intAwardID}" id="chkAward${objAward.intAwardID}"><label class="form-check-label" for="chkAward${objAward.intAwardID}">${objAward.strTitle}</label></div>`
             })
         })
         .catch(error => {
@@ -151,7 +176,7 @@ document.querySelector('#btnSaveJob').addEventListener('click', () => {
                     document.querySelector('#txtStartDate').value = ''
                     document.querySelector('#txtEndDate').value = ''
 
-                    // Refresh data
+                    // Refreshing the data. This will clear the list and get the new data from the database.
                     loadData()
                 } else {
                     Swal.fire({
@@ -175,6 +200,75 @@ document.querySelector('#btnSaveJob').addEventListener('click', () => {
             text: "You have to fill out all the fields."
         })
     }
+})
+
+// AI Review a Responsibility
+document.querySelector('#btnReviewResp').addEventListener('click', () => {
+    let strDescription = document.querySelector('#txtRespDescription').value.trim()
+
+    if (!strDescription) {
+        Swal.fire({
+            title: "Empty Description",
+            icon: "warning",
+            text: "Please enter a description to review."
+        })
+        return
+    }
+
+    Swal.fire({
+        title: "AI Review in progress...",
+        // This is to prevent the user from closing the window.
+        allowOutsideClick: false,
+        // Shows a loading animation
+        didOpen: () => {
+            Swal.showLoading()
+        }
+    })
+
+    fetch(strBaseUrl + 'review', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ strDescription: strDescription })
+    })
+        .then(result => {
+            if (result.ok) {
+                return result.json()
+            } else {
+                throw new Error(result.status)
+            }
+        })
+        // 
+        .then(data => {
+            if (data.outcome == "success") {
+                Swal.fire({
+                    title: "AI Suggestion",
+                    text: data.message,
+                    icon: "info",
+                    showCancelButton: true,
+                    confirmButtonText: "Apply Suggestion",
+                    cancelButtonText: "Keep Original"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.querySelector('#txtRespDescription').value = data.message
+                    }
+                })
+            } else {
+                Swal.fire({
+                    title: "Something went wrong",
+                    icon: "error",
+                    text: data.message
+                })
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                title: "Error",
+                icon: "error",
+                text: "Couldnt get AI review."
+            })
+        })
 })
 
 // Saving a Responsibility
@@ -348,7 +442,7 @@ document.querySelector('#btnSaveCert').addEventListener('click', () => {
                     document.querySelector('#txtCertIssuer').value = ''
                     document.querySelector('#txtCertDate').value = ''
 
-                    // Refresh data
+                    // Refreshing the data. This will clear the list and get the new data from the database.
                     loadData()
                 } else {
                     Swal.fire({
@@ -415,7 +509,7 @@ document.querySelector('#btnSaveAward').addEventListener('click', () => {
                     document.querySelector('#txtAwardDate').value = ''
                     document.querySelector('#txtAwardDescription').value = ''
 
-                    // Refresh data
+                    // Refreshing the data. This will clear the list and get the new data from the database.
                     loadData()
                 } else {
                     Swal.fire({
@@ -439,4 +533,232 @@ document.querySelector('#btnSaveAward').addEventListener('click', () => {
             text: "You have to fill out all the fields."
         })
     }
+})
+
+// This function is triggered when the user clicks the Generate Resume button.
+document.querySelector('#btnBuildResume').addEventListener('click', () => {
+
+    let strName = document.querySelector('#txtGenName').value.trim()
+    let strLocation = document.querySelector('#txtGenLocation').value.trim()
+    let strEmail = document.querySelector('#txtGenEmail').value.trim()
+    let strPhone = document.querySelector('#txtGenPhone').value.trim()
+    let strLinkedIn = document.querySelector('#txtGenLinkedIn').value.trim()
+    let strUniversity = document.querySelector('#txtGenUniversity').value.trim()
+    let strDegree = document.querySelector('#txtGenDegree').value.trim()
+    let strGradDate = document.querySelector('#txtGenGradDate').value.trim()
+    let strGPA = document.querySelector('#txtGenGPA').value.trim()
+
+    // We use document.querySelectorAll to find all checkboxes that are currently checked.
+    // Since the .value of these checkboxes are strings, we map over them and convert them to integers using parseInt().
+    // This creates arrays of integer IDs that correspond to the primary keys in our database.
+    let arrCheckedJobs = Array.from(document.querySelectorAll('input[name="chkJob"]:checked')).map(el => parseInt(el.value))
+    let arrCheckedResps = Array.from(document.querySelectorAll('input[name="chkResp"]:checked')).map(el => parseInt(el.value))
+    let arrCheckedSkills = Array.from(document.querySelectorAll('input[name="chkSkill"]:checked')).map(el => parseInt(el.value))
+    let arrCheckedCerts = Array.from(document.querySelectorAll('input[name="chkCert"]:checked')).map(el => parseInt(el.value))
+    let arrCheckedAwards = Array.from(document.querySelectorAll('input[name="chkAward"]:checked')).map(el => parseInt(el.value))
+
+    // We are building our template literal header.
+    // This is the header at the top of the resume.
+    let strHTML = `<div class="text-center mb-3" style="border-bottom: 1px solid black; padding-bottom: 5px;">
+        <h3 class="text-uppercase fw-bold mb-1" style="letter-spacing: 1px;">${strName}</h3>
+        <p class="mb-0">${strLocation} | ${strEmail} | ${strPhone}</p>
+        <p class="mb-0">Linkedin URL: ${strLinkedIn}</p>
+    </div>`
+
+    if (strUniversity || strDegree) {
+        strHTML += `<div class="mb-3">
+            <h3 class="text-uppercase fw-bold mb-2 pb-1">Education</h3>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                <span style="font-weight: bold;">${strUniversity}</span>
+                <span>${strGradDate}</span>
+            </div>
+            <ul style="padding-left: 20px; margin-bottom: 0;">
+                <li style="margin-bottom: 2px;">${strDegree}${strGPA ? `<span style="float: right;">GPA: ${strGPA}</span>` : ''}</li>
+            </ul>
+        </div>`;
+    }
+
+    // If the user checked any job checkboxes, we generate the Experience section.
+    if (arrCheckedJobs.length > 0) {
+        strHTML += `<h4 class="text-uppercase fw-bold mt-3 mb-1">EXPERIENCE</h4>`
+
+        // Looping through each checked Job ID
+        arrCheckedJobs.forEach(intJobID => {
+            // Find the matching job object in our global state cache (objAppState)
+            let objJob = objAppState.arrJobs.find(j => j.intJobID === intJobID)
+            if (objJob) {
+                // Adding the job details to the HTML
+                strHTML += `<div class="mb-2">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                        <span style="font-weight: bold;">${objJob.strTitle} | ${objJob.strCompany}</span>
+                        <span>${objJob.strStartDate} - ${objJob.strEndDate}</span>
+                    </div>
+                    <ul style="padding-left: 20px; margin-bottom: 15px;">`
+
+                // Finding all responsibilities that belong to this specific job AND are checked by the user
+                // We are doing this by checking if the foreign key matches our current job's ID and if the array of checked responsibilities includes it.
+                let arrJobResps = objAppState.arrResponsibilities.filter(objResp => objResp.intJobID === intJobID && arrCheckedResps.includes(objResp.intRespID))
+                arrJobResps.forEach(objResp => {
+                    // Appending each responsibility as a bullet point
+                    strHTML += `<li style="margin-bottom: 2px;">${objResp.strDescription}</li>`
+                })
+
+                strHTML += `</ul></div>` // Closing the list and job container
+            }
+        })
+    }
+
+    // If the user checked any skills, we group them by their category.
+    if (arrCheckedSkills.length > 0) {
+        strHTML += `<h4 class="text-uppercase fw-bold mt-3 mb-1">SKILLS</h4>`
+
+        // Filtering our skills array to only include the skills the user has checked.
+        let arrFilteredSkills = objAppState.arrSkills.filter(s => arrCheckedSkills.includes(s.intSkillID))
+
+        let strSkillsJoined = arrFilteredSkills.map(s => s.strSkillName).join(', ')
+        strHTML += `<ul style="padding-left: 20px; margin-bottom: 15px;">
+            <li style="margin-bottom: 2px;">${strSkillsJoined}</li>
+        </ul>`
+    }
+
+    // Certificates Section
+    if (arrCheckedCerts.length > 0) {
+        strHTML += `<h4 class="text-uppercase fw-bold mt-3 mb-1">CERTIFICATIONS</h4><ul style="padding-left: 20px; margin-bottom: 15px;">`
+
+        // We are looping through each checked certification ID and finding them
+        arrCheckedCerts.forEach(intCertID => {
+            let objCert = objAppState.arrCerts.find(c => c.intCertID === intCertID)
+            if (objCert) {
+                // Adding the cert name, issuer, and date
+                strHTML += `<li style="margin-bottom: 2px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span><strong>${objCert.strName}</strong> - ${objCert.strIssuer}</span>
+                        <span>${objCert.strDateEarned}</span>
+                    </div>
+                </li>`
+            }
+        })
+        strHTML += `</ul>`
+    }
+
+    // Awards & Honors Section
+    if (arrCheckedAwards.length > 0) {
+        strHTML += `<h4 class="text-uppercase fw-bold mt-3 mb-1">AWARDS & HONORS</h4><ul style="padding-left: 20px; margin-bottom: 15px;">`
+
+        // We are looping through each checked award ID and finding them
+        arrCheckedAwards.forEach(intAwardID => {
+            let objAward = objAppState.arrAwards.find(a => a.intAwardID === intAwardID)
+            if (objAward) {
+                // Adding the award title, date, and description
+                strHTML += `<li style="margin-bottom: 2px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span><strong>${objAward.strTitle}</strong> - ${objAward.strDescription}</span>
+                        <span>${objAward.strDateReceived}</span>
+                    </div>
+                </li>`
+            }
+        })
+        strHTML += `</ul>`
+    }
+
+    // Rendering the HTML
+    // We are injecting the fully string into the output container.
+    document.querySelector('#divResumeOutput').innerHTML = strHTML
+})
+
+// Printing the resume
+document.querySelector('#btnPrintResume').addEventListener('click', () => {
+    window.print()
+})
+
+// Delete Functions
+function deleteRecord(strEndpoint, intID) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You cannot revert this.",
+        icon: "warning",
+        showCancelButton: true,
+        // These are the colors for the buttons.
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Delete it."
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(strBaseUrl + strEndpoint + '/' + intID, {
+                method: 'DELETE'
+            })
+                .then(res => {
+                    if (res.ok) {
+                        return res.json()
+                    } else {
+                        throw new Error(res.status)
+                    }
+                })
+                .then(data => {
+                    if (data.outcome == "success") {
+                        Swal.fire("Deleted!", "The record has been deleted.", "success")
+                        loadData()
+                    } else {
+                        Swal.fire("Error", data.message, "error")
+                    }
+                })
+                .catch(err => {
+                    Swal.fire("Error", "Could not delete the record.", "error")
+                })
+        }
+    })
+}
+
+// Jobs
+document.querySelector('#tblJobsBody').addEventListener('click', (e) => {
+    if (e.target.classList.contains('btnDeleteJob')) {
+        // Getting the job ID from the data attribute and converting it to an integer.
+        let intJobID = parseInt(e.target.getAttribute('data-id'))
+        deleteRecord('jobs', intJobID)
+    }
+})
+
+// Responsibilities
+document.querySelector('#tblRespBody').addEventListener('click', (e) => {
+    if (e.target.classList.contains('btnDeleteResp')) {
+        // Getting the responsibility ID from the data attribute and converting it to an integer.
+        let intRespID = parseInt(e.target.getAttribute('data-id'))
+        deleteRecord('responsibilities', intRespID)
+    }
+})
+
+// Skills
+document.querySelector('#tblSkillsBody').addEventListener('click', (e) => {
+    // Getting the skill ID from the data attribute and converting it to an integer.
+    if (e.target.classList.contains('btnDeleteSkill')) {
+        let intSkillID = parseInt(e.target.getAttribute('data-id'))
+        deleteRecord('skills', intSkillID)
+    }
+})
+
+// Certifications
+document.querySelector('#tblCertsBody').addEventListener('click', (e) => {
+    // Getting the certification ID from the data attribute and converting it to an integer.
+    if (e.target.classList.contains('btnDeleteCert')) {
+        let intCertID = parseInt(e.target.getAttribute('data-id'))
+        deleteRecord('certifications', intCertID)
+    }
+})
+
+// Awards
+document.querySelector('#tblAwardsBody').addEventListener('click', (e) => {
+    // Getting the award ID from the data attribute and converting it to an integer.
+    if (e.target.classList.contains('btnDeleteAward')) {
+        let intAwardID = parseInt(e.target.getAttribute('data-id'))
+        deleteRecord('awards', intAwardID)
+    }
+})
+
+// Attributions
+document.querySelector('#btnAttributions').addEventListener('click', () => {
+    Swal.fire({
+        title: "Attributions",
+        html: "<p>This application uses:</p><ul><li><strong>Bootstrap</strong> for styling</li><li><strong>SweetAlert2</strong> for alerts</li><li><strong>Google Gemini</strong> for AI resume suggestions</li></ul>",
+        icon: "info"
+    })
 })
